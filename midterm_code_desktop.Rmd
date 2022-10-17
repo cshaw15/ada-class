@@ -1,0 +1,56 @@
+---
+title: "ADA Midterm"
+author: "Courtney Shaw"
+date: "10/14/2022"
+output: html_document
+---
+
+## Question 3 
+Using the titanic dataset located at "https://github.com/kijohnson/Data",  prepare an R markdown file that shows the code for a) importing the dataset, b) determining the median age for by passenger class, and c) a plot that shows medians, spread of data, and outliers for the continuous variable age according to passenger class. Report the medians by passenger class and upload a PDF or picture of your plot.
+
+## A) Import Dataset and clean code 
+```{r}
+#open library 
+pacman::p_load(tidyverse, table1)
+
+#gridExtra, knitr, kableExtra, mosaic, xtable, pscl, multcomp, pander, MASS, , lmtest, readr, stargazer, sandwich, lmtest, SMPracticals, writexl, broom
+```
+
+```{r}
+#import data 
+titanic_df <- read_csv("https://raw.githubusercontent.com/kijohnson/Data/main/titanic.csv")
+```
+
+```{r}
+#view titantic dataset 
+view(titanic_df)
+summary(titanic_df)
+```
+
+```{r}
+#recode Pclass variable as factor 
+titanic_df_clean <- titanic_df %>%
+  mutate(Pclass = factor(Pclass, levels = c(1: 3), labels = c("Class 1", "Class 2", "Class 3")))
+```
+
+## B) Determine median age by passenger class  
+```{r}
+#create table to determine median age by passenger class 
+table1(~ Age | Pclass, data = titanic_df_clean)
+```
+Median age by passenger class: 
+Class 1 = 38.5 
+Class 2 = 29.0
+Class 3 = 24.0  
+
+
+## C) Plot that shows medians, spread of data, and outliers for the continuous variable age according to passenger class
+```{r}
+#creat boxplot for Pclass and Age 
+ggplot(titanic_df_clean, aes(x = Pclass, y = Age)) + 
+  geom_boxplot(aes(fill = Pclass)) + 
+  labs(x = "Passenger Class", y = "Age", title = "Titantic Passenger Class by Age") + 
+  scale_fill_brewer(palette = "Dark2", guide = guide_legend(reverse = TRUE))
+```
+
+
